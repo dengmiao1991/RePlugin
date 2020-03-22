@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.qihoo360.replugin.MethodInvoker;
@@ -390,12 +391,22 @@ public class PluginLocalBroadcastManager {
 
         public static void initLocked(final ClassLoader classLoader) {
             // 填充LocalBroadcastManager各方法
+            final String localBroadcastManagerX = "androidx.localbroadcastmanager.content.LocalBroadcastManager";
             final String localBroadcastManager = "android.support.v4.content.LocalBroadcastManager";
-            getInstance = new MethodInvoker(classLoader, localBroadcastManager, "getInstance", new Class<?>[]{Context.class});
-            registerReceiver = new MethodInvoker(classLoader, localBroadcastManager, "registerReceiver", new Class<?>[]{BroadcastReceiver.class, IntentFilter.class});
-            unregisterReceiver = new MethodInvoker(classLoader, localBroadcastManager, "unregisterReceiver", new Class<?>[]{BroadcastReceiver.class});
-            sendBroadcast = new MethodInvoker(classLoader, localBroadcastManager, "sendBroadcast", new Class<?>[]{Intent.class});
-            sendBroadcastSync = new MethodInvoker(classLoader, localBroadcastManager, "sendBroadcastSync", new Class<?>[]{Intent.class});
+
+            String target = localBroadcastManagerX;
+            try {
+                classLoader.loadClass(target);
+            } catch (Exception e){
+                target = localBroadcastManager;
+            }
+            getInstance = new MethodInvoker(classLoader, target, "getInstance", new Class<?>[]{Context.class});
+            registerReceiver = new MethodInvoker(classLoader, target, "registerReceiver", new Class<?>[]{BroadcastReceiver.class, IntentFilter.class});
+            unregisterReceiver = new MethodInvoker(classLoader, target, "unregisterReceiver", new Class<?>[]{BroadcastReceiver.class});
+            sendBroadcast = new MethodInvoker(classLoader, target, "sendBroadcast", new Class<?>[]{Intent.class});
+            sendBroadcastSync = new MethodInvoker(classLoader, target, "sendBroadcastSync", new Class<?>[]{Intent.class});
+
+
         }
     }
 }
