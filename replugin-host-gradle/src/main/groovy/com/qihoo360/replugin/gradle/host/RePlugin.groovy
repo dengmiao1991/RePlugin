@@ -203,6 +203,8 @@ public class Replugin implements Plugin<Project> {
         println '--------------------------------------------------------------------------'
 //        println "${TAG} appID=${appID}"
         println "${TAG} useAppCompat=${config.useAppCompat}"
+
+        println "${TAG} useAndroidX=${config.useAndroidX}"
         // println "${TAG} persistentName=${config.persistentName}"
         println "${TAG} countProcess=${config.countProcess}"
 
@@ -286,4 +288,7 @@ class RepluginConfig {
 
     /** 当发现插件目录下面有不合法的插件 jar (有可能是特殊定制 jar)时是否停止构建,默认是 true */
     def enablePluginFileIllegalStopBuild = true
+
+    /** 宿主是否支持了 Androidx 库 */
+    def useAndroidX = false
 }

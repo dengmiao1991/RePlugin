@@ -46,5 +46,19 @@ dependencies {
     provided 'androidx.appcompat:appcompat:1.1.0'
 }
 
-project.ext.RP_ARTIFACT_ID = 'replugin-plugin-lib'
-apply from: '../../rp-publish.gradle'
+//project.ext.RP_ARTIFACT_ID = 'replugin-plugin-lib'
+//apply from: '../../rp-publish.gradle'
+apply plugin: 'maven'
+uploadArchives{
+    repositories.mavenDeployer{
+        // 本地仓库路径
+        repository(url:"file://C://Users/dengmiao/.m2/repository/")
+
+        // 唯一标识
+        pom.groupId = "com.qihoo360.replugin"
+        // 项目名称
+        pom.artifactId = "replugin-plugin-lib"
+        // 版本号
+        pom.version = "3.3.3-x"
+    }
+}
