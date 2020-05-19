@@ -30,11 +30,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.qihoo360.i.Factory;
 import com.qihoo360.i.Factory2;
@@ -69,6 +70,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.qihoo360.replugin.helper.LogDebug.LOG;
+import static com.qihoo360.replugin.helper.LogDebug.e;
 
 /**
  * RePlugin的对外入口类 <p>
@@ -733,7 +735,12 @@ public class RePlugin {
      */
     public static void registerInstalledReceiver(Context context, BroadcastReceiver r) {
         IntentFilter itf = new IntentFilter(RePluginConstants.ACTION_NEW_PLUGIN);
-        LocalBroadcastManager.getInstance(context).registerReceiver(r, itf);
+        if (HostConfigHelper.HOST_USE_ANDROIDX){
+            LocalBroadcastManager.getInstance(context).registerReceiver(r, itf);
+        } else {
+            android.support.v4.content.LocalBroadcastManager.getInstance(context).registerReceiver(r,itf);
+        }
+
     }
 
     /**

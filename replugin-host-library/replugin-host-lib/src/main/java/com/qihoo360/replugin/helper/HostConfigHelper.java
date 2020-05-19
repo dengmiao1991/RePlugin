@@ -61,6 +61,8 @@ public class HostConfigHelper {
     // 是否使用 AppCompat 库
     public static boolean ACTIVITY_PIT_USE_APPCOMPAT = false;
 
+    //host 是否支持了androidx库
+    public static boolean HOST_USE_ANDROIDX = false;
     //------------------------------------------------------------
     // 主程序支持的插件版本范围
     //------------------------------------------------------------
@@ -96,6 +98,13 @@ public class HostConfigHelper {
         } catch (NoSuchFieldException e) {
             // Ignore, Just use default value
         }
+
+        try {
+            HOST_USE_ANDROIDX = readField("HOST_USE_ANDROIDX");
+        } catch (NoSuchFieldException e) {
+            // Ignore, Just use default value
+        }
+
 
         try {
             ACTIVITY_PIT_COUNT_TS_STANDARD = readField("ACTIVITY_PIT_COUNT_TS_STANDARD");

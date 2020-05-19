@@ -20,11 +20,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.qihoo360.loader2.MP;
 import com.qihoo360.replugin.base.IPC;
+import com.qihoo360.replugin.helper.HostConfigHelper;
 import com.qihoo360.replugin.helper.LogDebug;
 import com.qihoo360.replugin.model.PluginInfo;
 
@@ -43,7 +45,12 @@ public class PluginInfoUpdater {
 
     public static void register(Context context) {
         IntentFilter filter = new IntentFilter(ACTION_UPDATE_INFO);
-        LocalBroadcastManager.getInstance(context).registerReceiver(new UpdateReceiver(), filter);
+        if (HostConfigHelper.HOST_USE_ANDROIDX) {
+            LocalBroadcastManager.getInstance(context).registerReceiver(new UpdateReceiver(), filter);
+        } else {
+            android.support.v4.content.LocalBroadcastManager.getInstance(context).registerReceiver(new UpdateReceiver(),filter);
+        }
+
     }
 
     static void updateIsUsed(Context context, String pluginName, boolean used) {

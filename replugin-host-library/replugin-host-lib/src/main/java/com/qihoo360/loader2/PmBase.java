@@ -27,8 +27,9 @@ import android.content.pm.ServiceInfo;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.qihoo360.i.Factory;
 import com.qihoo360.i.IModule;
@@ -651,7 +652,11 @@ class PmBase {
             intentFilter.addAction(ACTION_NEW_PLUGIN);
             intentFilter.addAction(ACTION_UNINSTALL_PLUGIN);
             try {
-                LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver, intentFilter);
+                if (HostConfigHelper.HOST_USE_ANDROIDX){
+                    LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver, intentFilter);
+                } else {
+                    android.support.v4.content.LocalBroadcastManager.getInstance(mContext).registerReceiver(mBroadcastReceiver,intentFilter);
+                }
             } catch (Exception e) {
                 if (LOGR) {
                     LogRelease.e(PLUGIN_TAG, "p m hlc a r e: " + e.getMessage(), e);
@@ -1184,7 +1189,12 @@ class PmBase {
         intent.putExtra(RePluginConstants.KEY_PLUGIN_INFO, (Parcelable) info);
         intent.putExtra(RePluginConstants.KEY_PERSIST_NEED_RESTART, persistNeedRestart);
         intent.putExtra(RePluginConstants.KEY_SELF_NEED_RESTART, mNeedRestart);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+
+        if (HostConfigHelper.HOST_USE_ANDROIDX){
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        } else {
+            android.support.v4.content.LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        }
     }
 
     final void pluginUninstalled(PluginInfo info) {

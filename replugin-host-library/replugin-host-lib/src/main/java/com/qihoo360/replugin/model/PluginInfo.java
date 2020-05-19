@@ -26,8 +26,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
 
 import com.qihoo360.loader2.Constant;
 import com.qihoo360.loader2.PluginNativeLibsHelper;
@@ -407,7 +407,6 @@ public class PluginInfo implements Serializable, Parcelable, Cloneable {
      * @param dirSuffix 目录后缀
      * @return 插件的Dex所在目录的File对象
      */
-    @NonNull
     private File getDexDir(File dexDir, String dirSuffix) {
 
         File dir = new File(dexDir, makeInstalledFileName() + dirSuffix);
@@ -1202,7 +1201,7 @@ public class PluginInfo implements Serializable, Parcelable, Cloneable {
 
     ////
 
-    private <T> T get(String name, @NonNull T def) {
+    private <T> T get(String name, T def) {
         final Object obj = mJson.get(name);
         return (def.getClass().isInstance(obj)) ? (T) obj : def;
     }

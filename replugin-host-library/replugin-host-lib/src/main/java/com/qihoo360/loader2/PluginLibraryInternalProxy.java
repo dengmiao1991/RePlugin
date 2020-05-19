@@ -767,7 +767,6 @@ public class PluginLibraryInternalProxy {
         if (LOG) {
             LogDebug.d("theme", "themeId = " + themeId);
         }
-
         return themeId;
     }
 
@@ -779,8 +778,13 @@ public class PluginLibraryInternalProxy {
      */
     private static int getDefaultThemeId() {
         if (HostConfigHelper.ACTIVITY_PIT_USE_APPCOMPAT) {
+            Class clazz;
             try {
-                Class clazz = ReflectUtils.getClass("android.support.v7.appcompat.R$style");
+                if (HostConfigHelper.HOST_USE_ANDROIDX){
+                    clazz = ReflectUtils.getClass("androidx.appcompat.R$style");
+                } else {
+                    clazz = ReflectUtils.getClass("android.support.v7.appcompat.R$style");
+                }
                 return (int) ReflectUtils.readStaticField(clazz, "Theme_AppCompat");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

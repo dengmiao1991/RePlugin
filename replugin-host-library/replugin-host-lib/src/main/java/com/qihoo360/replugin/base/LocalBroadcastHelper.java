@@ -18,7 +18,10 @@ package com.qihoo360.replugin.base;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
+
+import com.qihoo360.replugin.helper.HostConfigHelper;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.concurrent.Callable;
 
@@ -26,7 +29,7 @@ import java.util.concurrent.Callable;
  * 和LocalBroadcastManager有关的帮助类
  *
  * @author RePlugin Team
- * @see android.support.v4.content.LocalBroadcastManager
+ * @see androidx.localbroadcastmanager.content.LocalBroadcastManager
  */
 
 public class LocalBroadcastHelper {
@@ -44,7 +47,11 @@ public class LocalBroadcastHelper {
             ThreadUtils.syncToMainThread(new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {
-                    LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
+                    if (HostConfigHelper.HOST_USE_ANDROIDX) {
+                        LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
+                    } else {
+                        android.support.v4.content.LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
+                    }
                     return null;
                 }
             }, 10000);

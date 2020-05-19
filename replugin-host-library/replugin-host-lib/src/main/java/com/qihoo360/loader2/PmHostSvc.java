@@ -25,8 +25,9 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.qihoo360.mobilesafe.api.Tasks;
 import com.qihoo360.replugin.RePlugin;
@@ -498,7 +499,12 @@ class PmHostSvc extends IPluginHost.Stub {
         if (sync) {
             LocalBroadcastHelper.sendBroadcastSyncUi(mContext, intent);
         } else {
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+            if (HostConfigHelper.HOST_USE_ANDROIDX){
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+            } else {
+                android.support.v4.content.LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+            }
+
         }
     }
 
