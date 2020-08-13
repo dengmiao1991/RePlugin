@@ -391,13 +391,27 @@ public class PluginLocalBroadcastManager {
         public static void initLocked(final ClassLoader classLoader) {
             // 填充LocalBroadcastManager各方法
             final String localBroadcastManagerX = "androidx.localbroadcastmanager.content.LocalBroadcastManager";
-            final String localBroadcastManager = "android.support.v4.content.LocalBroadcastManager";
+            //在android x 编译环境下，如果开启了android.enableJetifier,编译时会把support 相关的常量字符串替换为android x的路径，所以这个地方用运行时赋值
+             String localBroadcastManagerV4 = "";
+            if (classLoader != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("android");
+                stringBuilder.append(".");
+                stringBuilder.append("support");
+                stringBuilder.append(".");
+                stringBuilder.append("v4");
+                stringBuilder.append(".");
+                stringBuilder.append("content");
+                stringBuilder.append(".");
+                stringBuilder.append("LocalBroadcastManager");
+                localBroadcastManagerV4 = stringBuilder.toString();
+            }
 
             String target = localBroadcastManagerX;
             try {
                 classLoader.loadClass(target);
             } catch (Exception e){
-                target = localBroadcastManager;
+                target = localBroadcastManagerV4;
             }
             getInstance = new MethodInvoker(classLoader, target, "getInstance", new Class<?>[]{Context.class});
             registerReceiver = new MethodInvoker(classLoader, target, "registerReceiver", new Class<?>[]{BroadcastReceiver.class, IntentFilter.class});
