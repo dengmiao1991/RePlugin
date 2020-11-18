@@ -103,6 +103,8 @@ public class HostConfigHelper {
             HOST_USE_ANDROIDX = readField("HOST_USE_ANDROIDX");
         } catch (NoSuchFieldException e) {
             // Ignore, Just use default value
+        } catch (NullPointerException e) {
+
         }
 
 
